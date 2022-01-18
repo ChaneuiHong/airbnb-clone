@@ -98,3 +98,12 @@ class Room(core_models.TimeStampModel):
     # __str__: 객체를 string 타입으로 보여줌?
     def __str__(self):
         return self.name
+
+    # room에 달린 Reivew의 평균
+    def total_rating(self):
+        # fk의 모든 reviews 객체를 가져옴
+        all_reviews = self.reviews.all()
+        all_ratings = 0
+        for review in all_reviews:
+            all_ratings += review.rating_average()
+        return round(all_ratings / len(all_reviews), 2)
