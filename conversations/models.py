@@ -9,7 +9,16 @@ class Conversation(core_models.TimeStampModel):
     participants = models.ManyToManyField("users.Users", blank=True)
 
     def __str__(self):
-        return f"{self.created}"
+        usernames = []
+        for user in self.participants.all():
+            usernames.append(user.username)
+        return ", ".join(usernames)
+
+    # fk 이용하여 messgae 가져오기
+    def count_messages(self):
+        return self.messages.count()
+
+    count_messages.short_description = "Number of Messages"
 
 
 class Message(core_models.TimeStampModel):

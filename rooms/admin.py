@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db.models import fields
+from django.utils.html import mark_safe
 from . import models
 
 # Register your models here.
@@ -19,15 +20,22 @@ class ItemAdmin(admin.ModelAdmin):
         return obj.rooms.count()
 
 
+# Photo의 fk를 통해 Room에 사진 업로드 기능 구현
+class RoomInline(admin.TabularInline):
+    model = models.Photo
+
+
 @admin.register(models.Room)
 class RommAdmin(admin.ModelAdmin):
 
     """Room Admin Definition"""
 
+    inlines = (RoomInline,)
+
     fieldsets = (
         (
             "Basic info",
-            {"fields": ("name", "description", "country", "address", "price")},
+            {"fields": ("name", "description", "country", "city", "address", "price")},
         ),
         (
             "Times",
@@ -45,6 +53,7 @@ class RommAdmin(admin.ModelAdmin):
                 ),
             },
         ),
+        ("Last Details", {"fields": ("host",)}),
     )
 
     list_display = (
@@ -79,6 +88,9 @@ class RommAdmin(admin.ModelAdmin):
         "house_rules",
     )
 
+    #
+    raw_id_fields = ("host",)
+
     search_fields = (
         "=city",
         "^host__username",
@@ -94,6 +106,15 @@ class RommAdmin(admin.ModelAdmin):
 @admin.register(models.Photo)
 class PhotoAdmin(admin.ModelAdmin):
 
-    """Phto Admin Definition"""
+    """Photo Admin Definition"""
 
-    pass
+    list_display = (
+        "__str__",
+        "get_thumbnail",
+    )
+
+    def get_thumbnail(self, obj):
+
+        return mark_safe(f'<img width=100px src="{obj.files.url}"/>')
+
+    get_thumbnail.short_description = "Thumbnail"

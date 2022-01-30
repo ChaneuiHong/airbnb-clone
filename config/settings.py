@@ -144,3 +144,10 @@ STATIC_URL = "/static/"
 # Substituting a custom User model
 # users >> model.py >> UsersConfig
 AUTH_USER_MODEL = "users.Users"
+
+
+# media 는 사용자가 업로드 하는 파일을 의미 <-> static은 개발자과 관리하는 파일
+# 업로드 파일 경로 생성
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+# 업로드 파일 경로의 url을 정해줌
+MEDIA_URL = "/media/"

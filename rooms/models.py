@@ -57,7 +57,7 @@ class Photo(AbstractItem):
     """Photo Model Definition"""
 
     caption = models.CharField(max_length=80)
-    files = models.ImageField()
+    files = models.ImageField(upload_to="room_photos")
     room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE)
 
     def __str__(self):
@@ -98,6 +98,12 @@ class Room(core_models.TimeStampModel):
     # __str__: 객체를 string 타입으로 보여줌?
     def __str__(self):
         return self.name
+
+    # model save() 시, 특정 이벤트를 발생
+    def save(self, *args, **kwargs):
+        # city의 첫 글자를 대문자료 표기
+        self.city = str.capitalize(self.city)
+        super().save(*args, **kwargs)
 
     # room에 달린 Reivew의 평균
     def total_rating(self):

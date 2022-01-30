@@ -1,3 +1,4 @@
+from tkinter import HORIZONTAL
 from django.contrib import admin
 from . import models
 
@@ -7,7 +8,12 @@ class ConversationsAdmin(admin.ModelAdmin):
 
     """Conversation Admin Defisition"""
 
-    pass
+    list_display = (
+        "__str__",
+        "count_messages",
+    )
+
+    filter_horizontal = ("participants",)
 
 
 @admin.register(models.Message)
@@ -15,4 +21,7 @@ class MessagesAdmin(admin.ModelAdmin):
 
     """Conversation Admin Defisition"""
 
-    pass
+    list_display = (
+        "__str__",
+        "created",
+    )
