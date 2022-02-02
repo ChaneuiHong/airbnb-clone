@@ -110,6 +110,8 @@ class Room(core_models.TimeStampModel):
         # fk의 모든 reviews 객체를 가져옴
         all_reviews = self.reviews.all()
         all_ratings = 0
-        for review in all_reviews:
-            all_ratings += review.rating_average()
-        return round(all_ratings / len(all_reviews), 2)
+        if len(all_reviews) > 0:
+            for review in all_reviews:
+                all_ratings += review.rating_average()
+            return round(all_ratings / len(all_reviews), 2)
+        return 0
